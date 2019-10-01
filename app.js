@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var config = require('./config');
-var router = require('./router').default;
+var router = require('./router');
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
