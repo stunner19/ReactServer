@@ -6,6 +6,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var config = require('./config');
 var router = require('./router');
+var passport = require('passport');
+var authenticate = require('./services/authenticate');
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
@@ -25,6 +27,7 @@ app.use(express.json());  // alternative for body-parser;
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize()); 
 router(app);
 
 // catch 404 and forward to error handler

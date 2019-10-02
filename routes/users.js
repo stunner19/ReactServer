@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 const bodyParser = require('body-parser');
 var User = require('../models/user');
+var passport = require('passport');
+var authenticate = require('../services/authenticate');
 
-router.use(bodyParser.json());
+router.use(bodyParser.json());-
 
 /* GET users listing. */
 router.post('/signup', (req, res, next) => {
@@ -38,12 +40,19 @@ router.post('/signup', (req, res, next) => {
 				else{
 					res.statusCode = 200;
 					res.setHeader('Content-Type','application/json');
-					res.json({status : 'Registration Successful', user : user});
+					res.json({status : 'Registration Successful', user : user, token : authenticate.getToken({user})});
 				}
 			})
 		}
 	}, (err) => next(err))
 	.catch((err) => next(err));
+});
+
+router.post('/login',passport.authenticate('local', { session : false}),(req,res) => {
+	var token = authenticate.getToken({user : req.user});
+	res.statusCode = 200;
+	res.setHeader('Content-Type','application/json');
+	res.json({ success: true, status : 'You are successfully logged in', token : token});
 });
 
 module.exports = router;
